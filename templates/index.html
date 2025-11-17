@@ -8,67 +8,155 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f7fafc; }
         .container-bg { background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%); }
+        .tab-button { transition: all 0.15s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
     <div class="container-bg w-full max-w-4xl p-8 shadow-2xl rounded-xl border border-blue-100 hover:shadow-blue-300/50">
         <h1 class="text-4xl font-extrabold text-gray-900 mb-2 text-center">Loan Payback Predictor</h1>
-        <p class="text-center text-gray-500 mb-8">Enter applicant details to calculate repayment probability.</p>
+        <p class="text-center text-gray-500 mb-8">Enter applicant details or upload a batch file to calculate repayment probability.</p>
         <hr class="mb-6 border-blue-300">
 
-        <form id="predictionForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Financial Data -->
-            <div class="col-span-1 md:col-span-2"><h2 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1">Financial Details</h2></div>
-            
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Loan Amount ($)</label><input type="number" id="loan_amount" value="15000" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Annual Income ($)</label><input type="number" id="annual_income" value="75000" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
-            
-            <!-- Added Monthly Debt Field -->
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Monthly Debt Payments ($)</label><input type="number" id="monthly_debt" value="1562" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border" placeholder="e.g. Rent + Credit Cards"></div>
-            
-            <!-- DTI Ratio is now Read-Only/Calculated -->
-            <div class="relative">
-                <label class="block text-sm font-medium text-gray-700">Calculated DTI Ratio</label>
-                <input type="number" step="0.0001" id="debt_to_income_ratio" value="0.25" readonly class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-100 text-gray-600 shadow-sm p-3 border cursor-not-allowed">
-            </div>
-
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Interest Rate (%)</label><input type="number" step="0.1" id="interest_rate" value="10.5" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
-            
-            <!-- Applicant Details -->
-            <div class="col-span-1 md:col-span-2 mt-4"><h2 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1">Applicant Details</h2></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Credit Score</label><input type="number" id="credit_score" value="720" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Employment Duration (Years)</label><input type="number" id="employment_duration" value="5" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
-            
-            <!-- Dropdowns -->
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Owns House?</label><select id="has_house" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="Y">Yes</option><option value="N">No</option></select></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Gender</label><select id="gender" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="male">Male</option><option value="female">Female</option></select></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Marital Status</label><select id="marital_status" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="single">Single</option><option value="married">Married</option></select></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Education</label><select id="education_level" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="bachelors">Bachelors</option><option value="masters">Masters</option><option value="high school">High School</option></select></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Employment Status</label><select id="employment_status" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="employed">Employed</option><option value="self-employed">Self-Employed</option></select></div>
-            <div class="relative"><label class="block text-sm font-medium text-gray-700">Loan Purpose</label><select id="loan_purpose" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="auto">Auto</option><option value="consolidation">Consolidation</option></select></div>
-            <div class="relative col-span-1 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Grade</label><select id="grade_subgrade" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="B3">B3</option><option value="A1">A1</option><option value="C5">C5</option></select></div>
-
-            <div class="col-span-1 md:col-span-2 mt-6">
-                <button type="submit" id="submitButton" class="w-full py-3 px-4 rounded-lg shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition">Get Prediction</button>
-            </div>
-        </form>
-
-        <div id="resultContainer" class="mt-8 pt-6 border-t border-blue-300 hidden">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">Result</h2>
-            <div id="resultOutput" class="text-4xl font-extrabold text-white p-6 rounded-xl text-center shadow-inner"></div>
-            <p id="resultMessage" class="text-center mt-3 text-lg text-gray-700"></p>
+        <!-- Tabs -->
+        <div class="flex border-b border-blue-300 mb-6">
+            <button id="tabSingle" onclick="showView('single')" 
+                    class="tab-button px-4 py-2 text-lg font-medium border-b-2 border-blue-600 text-blue-600 bg-white rounded-t-lg">
+                Single Record
+            </button>
+            <button id="tabBatch" onclick="showView('batch')" 
+                    class="tab-button px-4 py-2 text-lg font-medium text-gray-500 hover:text-blue-600 hover:border-blue-300">
+                Batch CSV Upload
+            </button>
         </div>
+
+        <!-- Single Record View -->
+        <div id="singleRecordView">
+            <p class="text-sm text-gray-500 mb-4">Calculate DTI ratio using Monthly Debt and Annual Income.</p>
+
+            <form id="predictionForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Financial Data -->
+                <div class="col-span-1 md:col-span-2"><h2 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1">Financial Details</h2></div>
+                
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Loan Amount ($)</label><input type="number" id="loan_amount" value="15000" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Annual Income ($)</label><input type="number" id="annual_income" value="75000" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
+                
+                <!-- Added Monthly Debt Field -->
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Monthly Debt Payments ($)</label><input type="number" id="monthly_debt" value="1562" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border" placeholder="e.g. Rent + Credit Cards"></div>
+                
+                <!-- DTI Ratio is Read-Only/Calculated -->
+                <div class="relative">
+                    <label class="block text-sm font-medium text-gray-700">Calculated DTI Ratio</label>
+                    <input type="number" step="0.0001" id="debt_to_income_ratio" value="0.25" readonly class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-100 text-gray-600 shadow-sm p-3 border cursor-not-allowed">
+                </div>
+    
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Interest Rate (%)</label><input type="number" step="0.1" id="interest_rate" value="10.5" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
+                
+                <!-- Applicant Details -->
+                <div class="col-span-1 md:col-span-2 mt-4"><h2 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1">Applicant Details</h2></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Credit Score</label><input type="number" id="credit_score" value="720" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Employment Duration (Years)</label><input type="number" id="employment_duration" value="5" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"></div>
+                
+                <!-- Dropdowns -->
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Owns House?</label><select id="has_house" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="Y">Yes</option><option value="N">No</option></select></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Gender</label><select id="gender" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="male">Male</option><option value="female">Female</option></select></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Marital Status</label><select id="marital_status" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="single">Single</option><option value="married">Married</option></select></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Education</label><select id="education_level" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="bachelors">Bachelors</option><option value="masters">Masters</option><option value="high school">High School</option></select></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Employment Status</label><select id="employment_status" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="employed">Employed</option><option value="self-employed">Self-Employed</option></select></div>
+                <div class="relative"><label class="block text-sm font-medium text-gray-700">Loan Purpose</label><select id="loan_purpose" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="auto">Auto</option><option value="consolidation">Consolidation</option></select></div>
+                <div class="relative col-span-1 md:col-span-2"><label class="block text-sm font-medium text-gray-700">Grade</label><select id="grade_subgrade" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border"><option value="B3">B3</option><option value="A1">A1</option><option value="C5">C5</option></select></div>
+    
+                <div class="col-span-1 md:col-span-2 mt-6">
+                    <button type="submit" id="submitButtonSingle" class="w-full py-3 px-4 rounded-lg shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition">Get Single Prediction</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Batch Upload View -->
+        <div id="batchUploadView" class="hidden">
+            <p class="text-sm text-gray-500 mb-4">Upload a CSV file. The file **must** contain columns with headers that exactly match the model features (e.g., `loan_amount`, `credit_score`, etc.).</p>
+            <form id="batchForm">
+                <div class="relative mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+                    <label for="csvFile" class="block text-sm font-medium text-gray-700 mb-2">Select CSV File</label>
+                    <input type="file" id="csvFile" accept=".csv" required 
+                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                </div>
+                <button type="submit" id="submitButtonBatch" 
+                        class="w-full py-3 px-4 rounded-lg shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
+                    Run Batch Prediction
+                </button>
+            </form>
+        </div>
+
+
+        <!-- Result Display Area -->
+        <div id="resultContainer" class="mt-8 pt-6 border-t border-blue-300 hidden">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center" id="resultTitle">Prediction Result</h2>
+            <!-- Single Result -->
+            <div id="singleResultDisplay" class="hidden">
+                <div id="resultOutput" class="text-4xl font-extrabold text-white p-6 rounded-xl text-center shadow-inner"></div>
+                <p id="resultMessage" class="text-center mt-3 text-lg text-gray-700"></p>
+            </div>
+            <!-- Batch Result Table -->
+            <div id="batchResultDisplay" class="hidden overflow-x-auto">
+                <p class="text-center text-gray-600 mb-4" id="batchSummary"></p>
+                <table id="batchResultTable" class="min-w-full divide-y divide-gray-200 rounded-lg shadow-md">
+                    <thead class="bg-blue-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Record #</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loan Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Probability of Payback</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="batchResultTableBody">
+                        <!-- Batch results inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Error/Loading Messages -->
         <div id="messageBox" class="mt-4 p-4 rounded-lg text-center font-medium hidden"></div>
     </div>
 
     <script>
         const API_URL = "/predict"; 
-
-        // --- Automatic DTI Computation Logic ---
         const annualIncomeInput = document.getElementById('annual_income');
         const monthlyDebtInput = document.getElementById('monthly_debt');
         const dtiInput = document.getElementById('debt_to_income_ratio');
+        const submitButtonSingle = document.getElementById('submitButtonSingle');
+        const submitButtonBatch = document.getElementById('submitButtonBatch');
+        const resultContainer = document.getElementById('resultContainer');
+        const messageBox = document.getElementById('messageBox');
+        
+        // --- Tab Management ---
+        function showView(view) {
+            document.getElementById('singleRecordView').classList.add('hidden');
+            document.getElementById('batchUploadView').classList.add('hidden');
+            document.getElementById('tabSingle').classList.remove('border-blue-600', 'text-blue-600', 'bg-white');
+            document.getElementById('tabBatch').classList.remove('border-blue-600', 'text-blue-600', 'bg-white');
+            document.getElementById('tabSingle').classList.add('text-gray-500', 'hover:text-blue-600');
+            document.getElementById('tabBatch').classList.add('text-gray-500', 'hover:text-blue-600');
+            
+            resultContainer.classList.add('hidden'); // Clear results when switching views
+            messageBox.classList.add('hidden');
 
+            if (view === 'single') {
+                document.getElementById('singleRecordView').classList.remove('hidden');
+                document.getElementById('tabSingle').classList.add('border-blue-600', 'text-blue-600', 'bg-white');
+                document.getElementById('tabSingle').classList.remove('text-gray-500', 'hover:text-blue-600');
+            } else if (view === 'batch') {
+                document.getElementById('batchUploadView').classList.remove('hidden');
+                document.getElementById('tabBatch').classList.add('border-blue-600', 'text-blue-600', 'bg-white');
+                document.getElementById('tabBatch').classList.remove('text-gray-500', 'hover:text-blue-600');
+            }
+        }
+
+        // Initialize to single view
+        showView('single');
+
+
+        // --- Helper Functions ---
         function calculateDTI() {
             const annualIncome = parseFloat(annualIncomeInput.value) || 0;
             const monthlyDebt = parseFloat(monthlyDebtInput.value) || 0;
@@ -76,31 +164,55 @@
             if (annualIncome > 0) {
                 const monthlyIncome = annualIncome / 12;
                 const dti = monthlyDebt / monthlyIncome;
-                dtiInput.value = dti.toFixed(4); // Display with 4 decimal places
+                dtiInput.value = dti.toFixed(4); 
             } else {
                 dtiInput.value = 0;
             }
         }
-
-        // Recalculate whenever Income or Debt changes
         annualIncomeInput.addEventListener('input', calculateDTI);
         monthlyDebtInput.addEventListener('input', calculateDTI);
-        // ---------------------------------------
+        calculateDTI(); // Initial calculation
+
+        function updateButtonState(button, isLoading) {
+            button.disabled = isLoading;
+            button.textContent = isLoading ? 'Predicting...' : button.id === 'submitButtonSingle' ? 'Get Single Prediction' : 'Run Batch Prediction';
+            button.classList.toggle('bg-blue-600', !isLoading);
+            button.classList.toggle('hover:bg-blue-700', !isLoading);
+            button.classList.toggle('bg-gray-400', isLoading);
+        }
+
+        function showMessage(text, isError = false) {
+            messageBox.textContent = text;
+            messageBox.className = isError 
+                ? "mt-4 p-4 rounded-lg text-center font-medium bg-red-100 text-red-700 border border-red-300"
+                : "mt-4 p-4 rounded-lg text-center font-medium bg-yellow-100 text-yellow-700 border border-yellow-300";
+            messageBox.classList.remove('hidden');
+        }
+
+        // --- Single Prediction Handler ---
 
         document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btn = document.getElementById('submitButton');
-            const resultCont = document.getElementById('resultContainer');
-            const msgBox = document.getElementById('messageBox');
+            updateButtonState(submitButtonSingle, true);
             
-            btn.disabled = true; btn.textContent = 'Predicting...';
-            resultCont.classList.add('hidden'); msgBox.style.display = 'none';
+            document.getElementById('singleResultDisplay').classList.add('hidden');
+            document.getElementById('batchResultDisplay').classList.add('hidden');
 
             const data = {};
-            ['loan_amount', 'credit_score', 'employment_duration', 'annual_income', 'interest_rate', 'debt_to_income_ratio', 'has_house', 'gender', 'marital_status', 'education_level', 'employment_status', 'loan_purpose', 'grade_subgrade'].forEach(id => {
+            // Feature list must match the server expectation
+            const featureIds = [
+                "loan_amount", "credit_score", "employment_duration", "annual_income", 
+                "interest_rate", "debt_to_income_ratio", "has_house", "gender", 
+                "marital_status", "education_level", "employment_status", 
+                "loan_purpose", "grade_subgrade"
+            ];
+            
+            featureIds.forEach(id => {
                 const val = document.getElementById(id).value;
+                // Since dti is calculated and all others are inputs/selects, this covers parsing
                 data[id] = isNaN(val) ? val : parseFloat(val);
             });
+
 
             try {
                 const res = await fetch(API_URL, {
@@ -108,22 +220,173 @@
                 });
                 const result = await res.json();
 
-                if (res.ok) {
+                if (res.ok && result.loan_payback_probability !== undefined) {
                     const prob = result.loan_payback_probability;
                     const pct = (prob * 100).toFixed(2);
+                    
                     const el = document.getElementById('resultOutput');
                     el.textContent = `${pct}%`;
-                    el.className = `text-4xl font-extrabold text-white p-6 rounded-xl text-center shadow-lg ${prob >= 0.75 ? 'bg-green-600' : prob >= 0.5 ? 'bg-yellow-600' : 'bg-red-600'}`;
-                    document.getElementById('resultMessage').textContent = prob >= 0.75 ? 'High likelihood of payback.' : 'Higher risk.';
-                    resultCont.classList.remove('hidden');
+                    
+                    let bgColor, message;
+                    if (prob >= 0.75) {
+                        bgColor = 'bg-green-600';
+                        message = 'High likelihood of payback. Recommended.';
+                    } else if (prob >= 0.50) {
+                        bgColor = 'bg-yellow-600';
+                        message = 'Moderate chance of payback. Caution advised.';
+                    } else {
+                        bgColor = 'bg-red-600';
+                        message = 'High risk of default. Not recommended.';
+                    }
+
+                    el.className = `text-4xl font-extrabold text-white p-6 rounded-xl text-center shadow-lg ${bgColor}`;
+                    document.getElementById('resultMessage').textContent = message;
+                    document.getElementById('resultTitle').textContent = 'Prediction Result (Single Record)';
+                    document.getElementById('singleResultDisplay').classList.remove('hidden');
+                    resultContainer.classList.remove('hidden');
                 } else {
-                    msgBox.textContent = `Error: ${result.error}`; msgBox.style.display = 'block'; msgBox.className = "mt-4 p-4 bg-red-100 text-red-700 rounded-lg";
+                    showMessage(`API Error: ${result.error || 'Check the server logs.'}`, true);
                 }
             } catch (err) {
-                msgBox.textContent = "Network Error. Service may be down."; msgBox.style.display = 'block'; msgBox.className = "mt-4 p-4 bg-red-100 text-red-700 rounded-lg";
+                showMessage("Network Error: Could not connect to the service. Is your server running?", true);
+            } finally {
+                updateButtonState(submitButtonSingle, false);
             }
-            btn.disabled = false; btn.textContent = 'Get Prediction';
         });
+
+        // --- Batch Prediction Handler ---
+
+        document.getElementById('batchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            updateButtonState(submitButtonBatch, true);
+            document.getElementById('singleResultDisplay').classList.add('hidden');
+            document.getElementById('batchResultDisplay').classList.add('hidden');
+            messageBox.classList.add('hidden');
+
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            if (!file) {
+                showMessage("Please select a CSV file.", true);
+                updateButtonState(submitButtonBatch, false);
+                return;
+            }
+
+            // Simple CSV parsing function
+            function parseCSV(csvText) {
+                const lines = csvText.trim().split('\n');
+                if (lines.length <= 1) {
+                    throw new Error("CSV file is empty or contains only headers.");
+                }
+
+                const headers = lines[0].trim().split(',').map(h => h.trim());
+                const records = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].trim().split(',');
+                    if (values.length !== headers.length) continue; // Skip malformed rows
+
+                    const record = {};
+                    headers.forEach((header, index) => {
+                        let value = values[index].trim();
+                        // Attempt to convert known numeric types to float
+                        if (!isNaN(value) && value !== "") {
+                            record[header] = parseFloat(value);
+                        } else {
+                            record[header] = value;
+                        }
+                    });
+                    records.push(record);
+                }
+                return records;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const csvData = event.target.result;
+                    const records = parseCSV(csvData);
+                    
+                    if (records.length === 0) {
+                        throw new Error("No valid data records found after parsing the CSV.");
+                    }
+
+                    showMessage(`Sending ${records.length} records for batch prediction...`, false);
+
+                    const res = await fetch(API_URL, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(records)
+                    });
+                    const result = await res.json();
+
+                    if (res.ok && result.loan_payback_probabilities) {
+                        displayBatchResults(records, result.loan_payback_probabilities);
+                    } else {
+                        showMessage(`API Error during batch prediction: ${result.error || 'Check the server logs.'}`, true);
+                    }
+                } catch (err) {
+                    showMessage(`File Processing Error: ${err.message}`, true);
+                } finally {
+                    updateButtonState(submitButtonBatch, false);
+                }
+            };
+            reader.onerror = function() {
+                showMessage("Error reading file.", true);
+                updateButtonState(submitButtonBatch, false);
+            };
+            reader.readAsText(file);
+        });
+
+        function displayBatchResults(records, probabilities) {
+            const tableBody = document.getElementById('batchResultTableBody');
+            tableBody.innerHTML = '';
+            
+            let recommendedCount = 0;
+            let totalRisk = 0;
+            
+            probabilities.forEach((prob, index) => {
+                const record = records[index];
+                const pct = (prob * 100).toFixed(2);
+                
+                let assessment, riskColor;
+                if (prob >= 0.75) {
+                    assessment = 'Recommended';
+                    riskColor = 'text-green-600 bg-green-50';
+                    recommendedCount++;
+                } else if (prob >= 0.50) {
+                    assessment = 'Moderate Risk';
+                    riskColor = 'text-yellow-600 bg-yellow-50';
+                } else {
+                    assessment = 'High Risk';
+                    riskColor = 'text-red-600 bg-red-50';
+                }
+                totalRisk += prob;
+
+                const row = tableBody.insertRow();
+                row.className = 'hover:bg-gray-50 transition duration-150';
+                
+                // Record #
+                row.insertCell().textContent = index + 1;
+                
+                // Loan Amount
+                row.insertCell().textContent = `$${record.loan_amount ? record.loan_amount.toLocaleString() : 'N/A'}`;
+
+                // Probability
+                const probCell = row.insertCell();
+                probCell.textContent = `${pct}%`;
+
+                // Risk Assessment
+                const riskCell = row.insertCell();
+                riskCell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${riskColor}">${assessment}</span>`;
+            });
+            
+            // Display Summary
+            document.getElementById('batchSummary').textContent = 
+                `Processed ${records.length} records. ${recommendedCount} loans are highly recommended for approval (Prob > 75%).`;
+
+            document.getElementById('resultTitle').textContent = `Batch Prediction Results (${records.length} Records)`;
+            document.getElementById('batchResultDisplay').classList.remove('hidden');
+            resultContainer.classList.remove('hidden');
+        }
+
     </script>
 </body>
 </html>
