@@ -43,15 +43,6 @@ customer and loan data.
 
 ## 📊 2. Dataset Overview
 
-The dataset includes financial indicators, loan details, demographic
-attributes, and repayment outcomes.
-
-**Target Variable**
-
-  Variable        Meaning
-  --------------- ---------------------------
-  `loan_status`   1 = repaid, 0 = defaulted
-
 **Data Source**
 
 The dataset for this project was sourced from the Kaggle Playground Series - Season 5, Episode 11 competition.
@@ -60,6 +51,14 @@ The dataset for this project was sourced from the Kaggle Playground Series - Sea
 
 -   Project Repository (Datasets Folder): https://github.com/BrutBoss/Loan-Payback-Prediction-Model/tree/main/Datasets
 
+The dataset includes financial indicators, loan details, demographic
+attributes, and repayment outcomes.
+
+**Target Variable**
+
+  Variable        Meaning
+  --------------- ---------------------------
+  `loan_status`   1 = repaid, 0 = defaulted
 
 ## 📈 3. Exploratory Data Analysis (EDA)
 
