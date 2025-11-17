@@ -1,10 +1,9 @@
 # 📘 Loan Payback Prediction Model
 
-*A machine learning system for predicting loan repayment probability.*
+*A machine learning model for predicting loan repayment probability.*
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.7.0-orange?logo=scikitlearn)
 ![XGBoost](https://img.shields.io/badge/XGBoost-Model-orange)
 ![Pandas](https://img.shields.io/badge/Pandas-Data%20Processing-blue?logo=pandas)
@@ -142,7 +141,7 @@ Models were evaluated using **ROC AUC**.
 
 The project includes a browser-based dashboard:
 
-**`loan_report.html`**
+**`/workspaces/Loan-Payback-Prediction-Model/loan_report.html`**
 
 Features: - Interactive EDA\
 - Model comparison charts\
