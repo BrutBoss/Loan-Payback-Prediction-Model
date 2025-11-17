@@ -17,4 +17,4 @@ COPY templates templates
 EXPOSE 9696
 
 # Define the command to run the application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:9696", "--timeout", "300", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:9696", "--timeout", "360", "app:app"]
