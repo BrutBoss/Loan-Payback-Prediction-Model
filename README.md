@@ -52,6 +52,15 @@ attributes, and repayment outcomes.
   --------------- ---------------------------
   `loan_status`   1 = repaid, 0 = defaulted
 
+**Data Source**
+
+The dataset for this project was sourced from the Kaggle Playground Series - Season 5, Episode 11 competition.
+
+-   Kaggle Competition: https://www.kaggle.com/competitions/playground-series-s5e11/data
+
+-   Project Repository (Datasets Folder): https://github.com/BrutBoss/Loan-Payback-Prediction-Model/tree/main/Datasets
+
+
 ## 📈 3. Exploratory Data Analysis (EDA)
 
 ### Key Findings
